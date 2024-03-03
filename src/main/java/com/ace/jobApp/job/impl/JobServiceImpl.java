@@ -1,6 +1,9 @@
 package com.ace.jobApp.job.impl;
 
+import com.ace.jobApp.company.Company;
+import com.ace.jobApp.company.CompanyService;
 import com.ace.jobApp.job.Job;
+import com.ace.jobApp.job.JobDto;
 import com.ace.jobApp.job.JobRepository;
 import com.ace.jobApp.job.JobService;
 import org.springframework.stereotype.Service;
@@ -9,10 +12,25 @@ import java.util.List;
 
 @Service
 public class JobServiceImpl implements JobService {
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
+    private final CompanyService companyService;
 
-    JobServiceImpl(JobRepository jobRepository) {
+    JobServiceImpl(JobRepository jobRepository, CompanyService companyService) {
         this.jobRepository = jobRepository;
+        this.companyService = companyService;
+    }
+
+    private Job dtoToJob(JobDto dto) {
+        Company company = companyService.findById(dto.companyId());
+        Job job = new Job();
+        job.setCompany(company);
+        job.setCurrency(dto.currency());
+        job.setLocation(dto.location());
+        job.setTitle(dto.title());
+        job.setDescription(dto.description());
+        job.setMinSalary(dto.minSalary());
+        job.setMaxSalary(dto.maxSalary());
+        return job;
     }
 
     @Override
@@ -21,7 +39,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job createJob(Job job) {
+    public Job createJob(JobDto jobDto) {
+        Job job = dtoToJob(jobDto);
         return jobRepository.save(job);
     }
 
@@ -35,14 +54,10 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job updateJob(Long id, Job updatedJobData) {
-        Job job = this.findJobById(id);
-        job.setTitle(updatedJobData.getTitle());
-        job.setDescription(updatedJobData.getDescription());
-        job.setCurrency(updatedJobData.getCurrency());
-        job.setMinSalary(updatedJobData.getMinSalary());
-        job.setMaxSalary(updatedJobData.getMaxSalary());
-        job.setLocation(updatedJobData.getLocation());
+    public Job updateJob(Long id, JobDto updatedJobData) {
+        Job existing = this.findJobById(id);
+        Job job = dtoToJob(updatedJobData);
+        job.setId(existing.getId());
         return jobRepository.save(job);
     }
 

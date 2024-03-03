@@ -22,7 +22,7 @@ public class JobController {
     }
 
     @PostMapping
-    public ResponseEntity<Job> create(@RequestBody Job data){
+    public ResponseEntity<Job> create(@RequestBody JobDto data){
         Job job = jobService.createJob(data);
         return new ResponseEntity<>(job, HttpStatus.CREATED);
     }
@@ -33,7 +33,7 @@ public class JobController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Job> update(@PathVariable Long id, @RequestBody Job job) {
+    public ResponseEntity<Job> update(@PathVariable Long id, @RequestBody JobDto job) {
         return  new ResponseEntity<>(jobService.updateJob(id, job), HttpStatus.OK);
     }
 
