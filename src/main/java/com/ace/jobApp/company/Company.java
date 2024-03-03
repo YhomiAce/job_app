@@ -1,6 +1,10 @@
 package com.ace.jobApp.company;
 
+import com.ace.jobApp.job.Job;
+import com.ace.jobApp.review.Review;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Company {
@@ -14,6 +18,28 @@ public class Company {
     private String description;
 
     private String address;
+
+    @OneToMany(mappedBy = "company")
+    List<Review> reviews;
+
+    @OneToMany(mappedBy = "company")
+    List<Job> jobs;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+    }
 
     public String getAddress() {
         return address;

@@ -1,9 +1,7 @@
 package com.ace.jobApp.job;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ace.jobApp.company.Company;
+import jakarta.persistence.*;
 
 @Entity
 public class Job {
@@ -22,6 +20,17 @@ public class Job {
     private String location;
 
     private String currency;
+
+    @ManyToOne
+    Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
     public Job() {
     }
